@@ -1,6 +1,11 @@
+locals {
+  main-locarion = "eastus"
+  prefix-name   = "main-network"
+}
+
 resource "azurerm_resource_group" "main" {
-  name     = "main_network"
-  location = "eastus"
+  name     = local.prefix-name
+  location = local.main-locarion
 }
 
 resource "azurerm_virtual_network_peering" "dev-to-hub-peer" {
