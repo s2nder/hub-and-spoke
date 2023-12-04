@@ -24,24 +24,6 @@ resource "azurerm_subnet" "vnet-2-spoke-sub" {
   address_prefixes     = local.subnet-vnet-2-cidr
 }
 
-resource "azurerm_virtual_network_peering" "vnet-2-spoke-hub-peer" {
-    name                      = "${local.name-vnet-2}-hub-peer"
-    resource_group_name       = azurerm_resource_group.vnet-2-spoke.name
-    virtual_network_name      = azurerm_virtual_network.vnet-2-spoke.name
-    remote_virtual_network_id = azurerm_virtual_network.hub-vnet.id
-
-    allow_virtual_network_access = true
-    allow_forwarded_traffic = true
-    allow_gateway_transit   = false
-    use_remote_gateways     = true
-    
-    depends_on = [ 
-        azurerm_virtual_network.vnet-2-spoke,
-        azurerm_virtual_network.hub-vnet,
-        #azurerm_virtual_network_gateway.hub-vnet-gateway
-        ]
-}
-
 resource "azurerm_network_interface" "vnet-2-spoke-nic" {
   name                = "${local.name-hub}-nic"
   location            = azurerm_resource_group.vnet-2-spoke.location
