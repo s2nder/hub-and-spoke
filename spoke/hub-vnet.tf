@@ -237,3 +237,27 @@ resource "azurerm_network_interface" "hub-vm-jump-nic" {
     public_ip_address_id          = azurerm_public_ip.hub-pip.id
   }
 }
+
+#### Network #### Security #### Group ####
+resource "azurerm_network_security_group" "hub-vm-workload-nsg" {
+  name                = "${local.hub-name}-nsg-workload"
+  location            = azurerm_resource_group.hub-and-spoke.location
+  resource_group_name = azurerm_resource_group.hub-and-spoke.name
+}
+
+resource "azurerm_network_security_group" "hub-vm-jump-nsg" {
+  name                = "${local.hub-name}-nsg-jump"
+  location            = azurerm_resource_group.hub-and-spoke.location
+  resource_group_name = azurerm_resource_group.hub-and-spoke.name
+  security_rule {
+    name                       = "Allow-RDP"
+    priority                   = 300
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "3389"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+}
